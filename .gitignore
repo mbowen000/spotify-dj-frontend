@@ -1,3 +1,6 @@
 conf/*
 node_modules/*
 public/bower_components/*
+spotifydb
+spotifydb_original_old
+*sublime-workspace
