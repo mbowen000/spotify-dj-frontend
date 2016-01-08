@@ -20,8 +20,8 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
     });
 }])
 
-.controller('AppCtrl', ['$route', '$routeParams', '$location', 'Queue', 'socket', 'Track', '$http', '$rootScope',
-  function($route, $routeParams, $location, Queue, socket, Track, $http, $rootScope) {
+.controller('AppCtrl', ['$route', '$routeParams', '$location', 'Queue', 'socket', 'Track', '$http', '$rootScope', '$mdToast',
+  function($route, $routeParams, $location, Queue, socket, Track, $http, $rootScope, $mdToast) {
     var that = this;
     this.$route = $route;
     this.$location = $location;
@@ -39,7 +39,16 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
 
         console.log('adding track');
         var item = new Queue(track);
-        item.$save();
+        item.$save().then(function(response) {
+          $mdToast.show(
+            $mdToast.simple().textContent('Added!').hideDelay(3000)
+          );
+        }, function(error) {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('No Rick Astley!')
+          );
+        });
       }
     };
 
@@ -60,10 +69,10 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
         track: track,
         user: $rootScope.user
       }
-      if(_.findWhere(_.pluck(track.votes, 'user'), { id: upvote.user.id })) {
-        alert('Please don\'t Upvote More than Once!');
-      }
-      else {
+      // if(_.findWhere(_.pluck(track.votes, 'user'), { id: upvote.user.id })) {
+      //   alert('Please don\'t Upvote More than Once!');
+      // }
+      //else {
         $http.post('/track/upvote', upvote).then(function(updatedTrack) {
           if(track.votes && track.votes.length > 0) {
             track.votes.splice(0, track.votes.length);
@@ -80,7 +89,13 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
           that.fetchQueue();
 
         });
-      }
+      //}
+    }
+
+    that.remove = function(track) {
+      $http.post('/queue/delete', track).then(function(resp) {
+        that.fetchQueue();
+      });
     }
 
     socket.on('trackAdded', function() {

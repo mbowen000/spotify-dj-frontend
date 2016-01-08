@@ -30,10 +30,13 @@
 	<md-list-item class="md-2-line md-no-proxy" ng-repeat="track in app.queue" ng-class="{playing: track.playing}">
 		<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
 			<b>{{track.upvoteCount || 0}}</b>
+			<md-tooltip md-direction="right" ng-if="track.upvoteCount > 0">
+				<span ng-repeat="vote in track.votes">{{vote.user.display_name || track.user.id || 'unknown'}}&nbsp;</span>
+			</md-tooltip>
 		</md-button>
 		<span>					
-			<img class="md-avatar" src="{{track.user.images[0].url}}"/>
-			<md-tooltip ng-if="track.user.display_name">{{track.user.display_name}}</md-tooltip>
+			<img class="md-avatar" src="{{track.user.images[0].url || 'https://placehold.it/40x40' }}"/>
+			<md-tooltip ng-if="track.user.display_name || track.user.id">{{track.user.display_name || track.user.id || 'unknown'}}</md-tooltip>
 		</span>
 		
 		<div class="md-list-item-text layout-column">
@@ -46,6 +49,10 @@
 			<!-- <md-icon md-font-set="material-icons">thumb_up</md-icon> -->
  			<md-button ng-click="app.upvote(track)" class="md-icon-button md-accent" aria-label="Favorite">
 				<md-icon md-font-set="material-icons">favorite</md-icon>
+			</md-button>
+
+			<md-button ng-show="$root.user.id === 'mbowen000'" ng-click="app.remove(track)" class="md-icon-button md-accent" aria-label="Delete">
+				<md-icon md-font-set="material-icons">delete</md-icon>
 			</md-button>
  
 		</div>
