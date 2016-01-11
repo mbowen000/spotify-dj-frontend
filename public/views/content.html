@@ -31,7 +31,7 @@
 		<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
 			<b>{{track.upvoteCount || 0}}</b>
 			<md-tooltip md-direction="right" ng-if="track.upvoteCount > 0">
-				<span ng-repeat="vote in track.votes">{{vote.user.display_name || track.user.id || 'unknown'}}&nbsp;</span>
+				<span ng-repeat="vote in track.votes">{{vote.user.display_name || vote.user.id || 'unknown'}}&nbsp;</span>
 			</md-tooltip>
 		</md-button>
 		<span>					
