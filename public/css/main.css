@@ -2,3 +2,6 @@
 	font-weight:bold;
 	background-color:green;
 }
+.autocomplete-results .result-image {
+	padding:12px;
+}

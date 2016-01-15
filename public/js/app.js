@@ -26,6 +26,8 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
     this.$route = $route;
     this.$location = $location;
     this.$routeParams = $routeParams;
+    this.searchText = null;
+    this.nowPlaying = null;
 
     that.query = function(q) {
       return Track.query({ query: q });
@@ -43,6 +45,7 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
           $mdToast.show(
             $mdToast.simple().textContent('Added!').hideDelay(3000)
           );
+          that.searchText = null;
         }, function(error) {
           $mdToast.show(
             $mdToast.simple()
@@ -60,6 +63,7 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
             that.queue.push(item);
           }
         });
+        that.getNowPlaying();
       });
     };
 
@@ -74,20 +78,24 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
       // }
       //else {
         $http.post('/track/upvote', upvote).then(function(updatedTrack) {
-          if(track.votes && track.votes.length > 0) {
-            track.votes.splice(0, track.votes.length);
-          }
-          angular.forEach(updatedTrack.data.votes, function(vote) {
-            if(!track.votes) {
-              track.votes = [];
-            }
-            track.votes.push(vote);
-          });
-          track.upvoteCount = updatedTrack.data.upvoteCount;
-          track.downvoteCount = updatedTrack.data.downvoteCount || 0;
+          // if(track.votes && track.votes.length > 0) {
+          //   track.votes.splice(0, track.votes.length);
+          // }
+          // angular.forEach(updatedTrack.data.votes, function(vote) {
+          //   if(!track.votes) {
+          //     track.votes = [];
+          //   }
+          //   track.votes.push(vote);
+          // });
+          // track.upvoteCount = updatedTrack.data.upvoteCount;
+          // track.downvoteCount = updatedTrack.data.downvoteCount || 0;
 
           that.fetchQueue();
 
+        }).catch(function(err) {
+          $mdToast.show(
+            $mdToast.simple().textContent('Youre not allowed to upvote your own songs, silly!')
+          );
         });
       //}
     }
@@ -97,6 +105,12 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
         that.fetchQueue();
       });
     }
+
+    that.getNowPlaying = function() {
+      $http.get('/nowplaying').then(function(resp) {
+        that.nowPlaying = resp.data;
+      });
+    };
 
     socket.on('trackAdded', function() {
       that.fetchQueue();
