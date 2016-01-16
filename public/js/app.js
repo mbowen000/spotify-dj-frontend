@@ -93,8 +93,9 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
           that.fetchQueue();
 
         }).catch(function(err) {
+
           $mdToast.show(
-            $mdToast.simple().textContent('Youre not allowed to upvote your own songs, silly!')
+            $mdToast.simple().textContent(err.data)
           );
         });
       //}
