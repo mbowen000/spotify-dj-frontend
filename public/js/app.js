@@ -28,6 +28,10 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
     this.$routeParams = $routeParams;
     this.searchText = null;
     this.nowPlaying = null;
+    this.currentPage = 0;
+    this.total = 0;
+    this.numPerPage = 0;
+    this.totalPages = 0;
 
     that.query = function(q) {
       return Track.query({ query: q });
@@ -55,10 +59,16 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
       }
     };
 
-    that.fetchQueue = function() {
-      Queue.query().$promise.then(function(response) {
+    that.fetchQueue = function(page) {
+      var page = page || 0;
+      that.currentPage = page;
+      
+      Queue.query({page: page}).$promise.then(function(response) {
         that.queue = [];
-        angular.forEach(response, function(item) {
+        that.total = response.total;
+        that.numPerPage = response.numPerPage;
+        that.totalPages = Math.ceil(that.total / that.numPerPage);
+        angular.forEach(response.records, function(item) {
           if(item.uri) {
             that.queue.push(item);
           }
@@ -101,6 +111,11 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
       //}
     }
 
+    that.nextPage = function() {
+      that.currentPage++;
+      that.fetchQueue();
+    }
+
     that.remove = function(track) {
       $http.post('/queue/delete', track).then(function(resp) {
         that.fetchQueue();
@@ -129,7 +144,12 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
 }])
 
 .factory('Queue', ['$resource', function($resource) {
-  return $resource('queue', null);
+  return $resource('queue', null, {
+    'query': {
+      isArray: false,
+      method: 'GET'
+    }
+  });
 }])
 
 .factory('Track', ['$resource', function($resource) {
