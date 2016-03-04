@@ -62,7 +62,7 @@
 		</div>
 
 		<md-list flex="100">
-			<md-list-item class="md-2-line md-no-proxy" ng-repeat="track in app.queue" ng-class="{playing: track.playing}">
+			<md-list-item class="md-2-line md-no-proxy" ng-repeat="track in app.queue track by $index" ng-class="{playing: track.playing}">
 				<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
 					<b>{{track.upvoteCount || 0}}</b>
 					<md-tooltip md-direction="right" ng-if="track.upvoteCount > 0">
@@ -90,6 +90,14 @@
 				</div>
 			</md-list-item>
 		</md-list>
+<!-- 
+		Total: {{app.total}}<br/>
+		Total pages: {{app.totalPages}} -->
+		<div layout="row" layout-align="center">
+			<md-button class="md-raised md-warn" ng-show="app.currentPage > 0" ng-click="app.fetchQueue(0)">Back to Top</md-button>
+			<md-button class="md-raised md-primary" ng-show="app.currentPage > 0" ng-click="app.fetchQueue(app.currentPage-1)">Last Page</md-button>
+			<md-button class="md-raised md-primary" ng-show="app.currentPage < app.totalPages-1" ng-click="app.fetchQueue(app.currentPage+1)">Next Page</md-button>
+		</div>
 
 	</div>
 	
