@@ -1,104 +1,113 @@
-<div layout="row" layout-wrap>
-	<div class="md-padding" flex-gt-md="50" flex="100">
+<md-content flex>
+	<div layout="row" layout-wrap>
+		<div class="md-padding" flex="100">
 
-		<md-autocomplete 
-			md-selected-item="app.currentSelectedTrack"
-			md-selected-item-change="app.addTrackToQueue(app.currentSelectedTrack)" 
-			md-search-text="app.searchtext" 
-			md-item-text="item.name" 
-			md-delay="1500" 
-			placeholder="Search by Artist and/or Track Name"
-			md-menu-class="autocomplete-results row"
-			md-items="item in app.query(app.searchtext)">
-			<md-item-template>
-		    	<!-- <span md-highlight-text="searchText">{{item.artists[0].name}} - {{item.name}}</span> -->
-		    	<div layout="row">
-	    		  	<div flex="none">
-	    		  		<img class="result-image" src="{{item.album.images[0].url}}" width="40" height="40"/>
-	    		  	</div>
-	  				<div flex>{{item.artists[0].name}} - {{item.name}}</div>
-		    	</div>
-		  	</md-item-template>
-		  <md-not-found>
-		    No matches found.
-		  </md-not-found>
-		</md-autocomplete>
+			<md-autocomplete 
+				md-selected-item="app.currentSelectedTrack"
+				md-selected-item-change="app.addTrackToQueue(app.currentSelectedTrack)" 
+				md-search-text="app.searchtext" 
+				md-item-text="item.name" 
+				md-delay="1500" 
+				placeholder="Search by Artist and/or Track Name"
+				md-menu-class="autocomplete-results row"
+				md-items="item in app.query(app.searchtext)">
+				<md-item-template>
+			    	<!-- <span md-highlight-text="searchText">{{item.artists[0].name}} - {{item.name}}</span> -->
+			    	<div layout="row">
+		    		  	<div flex="none">
+		    		  		<img class="result-image" src="{{item.album.images[0].url}}" width="40" height="40"/>
+		    		  	</div>
+		  				<div flex>{{item.artists[0].name}} - {{item.name}}</div>
+			    	</div>
+			  	</md-item-template>
+			  <md-not-found>
+			    No matches found.
+			  </md-not-found>
+			</md-autocomplete>
 
-	</div>
-
-	<!-- <table>
-		<tr ng-repeat="track in app.queue">
-			<td>{{track.uri}}</td>
-			<td>{{track.name}}</td>
-			<td>
-				<p ng-repeat="artist in track.artists">
-					{{artist.name}}
-				</p>
-			</td>
-		</tr>
-	</table> -->
-	<div flex="100" flex-gt-md="50">
-
-		<div class="md-padding" ng-if="app.nowPlaying.name" flex="100">
-			<md-list-item class="md-2-line md-no-proxy md-padding md-whiteframe-2dp" >
-				<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
-					<b>{{app.nowPlaying.upvoteCount || 0}}</b>
-					<md-tooltip md-direction="right" ng-if="app.nowPlaying.upvoteCount > 0">
-						<span ng-repeat="vote in app.nowPlaying.votes">{{vote.user.display_name || vote.user.id || 'unknown'}}&nbsp;</span>
-					</md-tooltip>
-				</md-button>
-				<span>					
-					<img class="md-avatar" src="{{app.nowPlaying.user.images[0].url || 'https://placehold.it/40x40' }}"/>
-					<md-tooltip ng-if="app.nowPlaying.user.display_name || app.nowPlaying.user.id">{{app.nowPlaying.user.display_name || app.nowPlaying.user.id || 'unknown'}}</md-tooltip>
-				</span>
-				
-				<div class="md-list-item-text layout-column">
-					<h3>{{app.nowPlaying.artists[0].name}}</h3>
-					<h4>{{app.nowPlaying.name}}</h4>
-				</div>
-				<div class="md-list-item-text"> 
-				</div>
-			</md-list-item>
 		</div>
 
-		<md-list flex="100">
-			<md-list-item class="md-2-line md-no-proxy" ng-repeat="track in app.queue track by $index" ng-class="{playing: track.playing}">
-				<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
-					<b>{{track.upvoteCount || 0}}</b>
-					<md-tooltip md-direction="right" ng-if="track.upvoteCount > 0">
-						<span ng-repeat="vote in track.votes">{{vote.user.display_name || vote.user.id || 'unknown'}}&nbsp;</span>
-					</md-tooltip>
-				</md-button>
-				<span>					
-					<img class="md-avatar" src="{{track.user.images[0].url || 'https://placehold.it/40x40' }}"/>
-					<md-tooltip ng-if="track.user.display_name || track.user.id">{{track.user.display_name || track.user.id || 'unknown'}}</md-tooltip>
-				</span>
-				
-				<div class="md-list-item-text layout-column">
-					<h3>{{track.artists[0].name}}</h3>
-					<h4>{{track.name}}</h4>
-				</div>
-				<div class="md-list-item-text" style='text-align:right'>
-					<md-button ng-click="app.upvote(track)" class="md-icon-button md-accent" aria-label="Favorite" ng-show="track.user.id !== $root.user.id">
-						<md-icon md-font-set="material-icons">favorite</md-icon>
-					</md-button>
+		<!-- <table>
+			<tr ng-repeat="track in app.queue">
+				<td>{{track.uri}}</td>
+				<td>{{track.name}}</td>
+				<td>
+					<p ng-repeat="artist in track.artists">
+						{{artist.name}}
+					</p>
+				</td>
+			</tr>
+		</table> -->
+		<div flex="100">
 
-					<md-button ng-show="$root.user.id === 'mbowen000'" ng-click="app.remove(track)" class="md-icon-button md-accent" aria-label="Delete">
-						<md-icon md-font-set="material-icons">delete</md-icon>
+			<div class="md-padding" ng-if="app.nowPlaying.name" flex="100">
+				<md-list-item class="md-2-line md-no-proxy md-padding md-whiteframe-2dp" >
+					<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
+						<b>{{app.nowPlaying.upvoteCount || 0}}</b>
+						<md-tooltip md-direction="right" ng-if="app.nowPlaying.upvoteCount > 0">
+							<span ng-repeat="vote in app.nowPlaying.votes">{{vote.user.display_name || vote.user.id || 'unknown'}}&nbsp;</span>
+						</md-tooltip>
 					</md-button>
-		 
-				</div>
-			</md-list-item>
-		</md-list>
+					<span>					
+						<img class="md-avatar" src="{{app.nowPlaying.user.images[0].url || 'https://placehold.it/40x40' }}"/>
+						<md-tooltip ng-if="app.nowPlaying.user.display_name || app.nowPlaying.user.id">{{app.nowPlaying.user.display_name || app.nowPlaying.user.id || 'unknown'}}</md-tooltip>
+					</span>
+					
+					<div class="md-list-item-text layout-column">
+						<h3>{{app.nowPlaying.artists[0].name}}</h3>
+						<h4>{{app.nowPlaying.name}}</h4>
+					</div>
+					<div class="md-list-item-text"> 
+					</div>
+				</md-list-item>
+			</div>
+
+			<md-list flex="100">
+				<md-list-item class="md-2-line md-no-proxy" ng-repeat="track in app.queue track by $index" ng-class="{playing: track.playing}">
+					<md-button class="md-fab md-mini md-primary" aria-label="Eat cake">
+						<b>{{track.upvoteCount || 0}}</b>
+						<md-tooltip md-direction="right" ng-if="track.upvoteCount > 0">
+							<span ng-repeat="vote in track.votes">{{vote.user.display_name || vote.user.id || 'unknown'}}&nbsp;</span>
+						</md-tooltip>
+					</md-button>
+					<span>					
+						<img class="md-avatar" src="{{track.user.images[0].url || 'https://placehold.it/40x40' }}"/>
+						<md-tooltip ng-if="track.user.display_name || track.user.id">{{track.user.display_name || track.user.id || 'unknown'}}</md-tooltip>
+					</span>
+					
+					<div class="md-list-item-text layout-column">
+						<h3>{{track.artists[0].name}}</h3>
+						<h4>{{track.name}}</h4>
+					</div>
+					<div class="md-list-item-text" style='text-align:right'>
+						<md-button ng-click="app.upvote(track)" class="md-icon-button md-accent" aria-label="Favorite" ng-show="track.user.id !== $root.user.id">
+							<md-icon md-font-set="material-icons">favorite</md-icon>
+						</md-button>
+
+						<md-button ng-show="$root.user.id === 'mbowen000'" ng-click="app.remove(track)" class="md-icon-button md-accent" aria-label="Delete">
+							<md-icon md-font-set="material-icons">delete</md-icon>
+						</md-button>
+			 
+					</div>
+				</md-list-item>
+			</md-list>
+
+		</div>
+		
+	</div>
+
 <!-- 
-		Total: {{app.total}}<br/>
-		Total pages: {{app.totalPages}} -->
-		<div layout="row" layout-align="center">
-			<md-button class="md-raised md-warn" ng-show="app.currentPage > 0" ng-click="app.fetchQueue(0)">Back to Top</md-button>
-			<md-button class="md-raised md-primary" ng-show="app.currentPage > 0" ng-click="app.fetchQueue(app.currentPage-1)">Last Page</md-button>
-			<md-button class="md-raised md-primary" ng-show="app.currentPage < app.totalPages-1" ng-click="app.fetchQueue(app.currentPage+1)">Next Page</md-button>
-		</div>
-
+	Total: {{app.total}}<br/>
+	Total pages: {{app.totalPages}} -->
+	<div layout="row" layout-align="center">
+		<md-button class="md-fab md-warn" ng-show="app.currentPage > 0" ng-click="app.fetchQueue(0)">
+			<md-icon md-font-set="material-icons">first_page</md-icon>
+		</md-button>
+		<md-button class="md-fab md-primary" ng-show="app.currentPage > 0" ng-click="app.fetchQueue(app.currentPage-1)">
+			<md-icon md-font-set="material-icons">arrow_back</md-icon>
+		</md-button>
+		<md-button class="md-fab md-primary" ng-show="app.currentPage < app.totalPages-1" ng-click="app.fetchQueue(app.currentPage+1)">
+			<md-icon md-font-set="material-icons">arrow_forward</md-icon>
+		</md-button>
 	</div>
-	
-</div>
+</md-content>
