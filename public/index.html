@@ -10,6 +10,7 @@
 	<script src="bower_components/socket.io-client/socket.io.js"></script>
 	<script src="bower_components/angular-material/angular-material.js"></script>
 	<script src="js/app.js"></script>
+	<script src="js/room.js"></script>
 
 	<base href="/"/>
 
@@ -24,7 +25,7 @@
 
 <body ng-app="spotifyapp">
 
-    <md-toolbar md-scroll-shrink ng-controller="HeaderController">
+    <md-toolbar md-scroll-shrink ng-controller="HeaderController as hc">
       <div class="md-toolbar-tools">
         <!-- <md-button class="md-icon-button" aria-label="Settings">
           <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
@@ -33,6 +34,7 @@
           <span>Team Tunes</span>
         </h2>
         <span flex></span>
+        <select ng-model="hc.roomService.selectedRoom" ng-options="room as room.name for room in hc.roomService.rooms"></select>
 
 		<i class="material-icons md-36">face</i>&nbsp;
         <h5>Logged in as {{$root.user.display_name}}</h5>

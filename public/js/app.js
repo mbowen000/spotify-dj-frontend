@@ -1,4 +1,4 @@
-angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'])
+angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial', 'spotifyapp.room'])
 .config(['$routeProvider', '$locationProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider
@@ -10,18 +10,27 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
 
     $locationProvider.html5Mode(true);
 }])
-.controller('HeaderController', ['$http', '$rootScope', function($http, $rootScope) {
+.controller('HeaderController', ['$http', '$rootScope', 'RoomService', function($http, $rootScope, RoomService) {
   $http.get('/me').then(function(response) {
       $rootScope.user = response.data;
+      $rootScope.$broadcast('login', response);
       console.log('logged in');
     },function(error) {
       // if error, we need to redirect to /login
       window.location = '/login';
     });
+
+    this.roomService = RoomService;
+    var self = this;
+    this.roomService.fetch().then(function(results) {
+      self.roomService.rooms = results;
+    });
+
+    return this;
 }])
 
-.controller('AppCtrl', ['$route', '$routeParams', '$location', 'Queue', 'socket', 'Track', '$http', '$rootScope', '$mdToast',
-  function($route, $routeParams, $location, Queue, socket, Track, $http, $rootScope, $mdToast) {
+.controller('AppCtrl', ['$route', '$routeParams', '$location', 'Queue', 'socket', 'Track', '$http', '$rootScope', '$mdToast', 'Room', 'RoomService',
+  function($route, $routeParams, $location, Queue, socket, Track, $http, $rootScope, $mdToast, Room, RoomService) {
     var that = this;
     this.$route = $route;
     this.$location = $location;
@@ -32,6 +41,7 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
     this.total = 0;
     this.numPerPage = 0;
     this.totalPages = 0;
+    this.rooms = [];
 
     that.query = function(q) {
       return Track.query({ query: q });
@@ -63,7 +73,7 @@ angular.module('spotifyapp', ['ngRoute', 'ngAnimate', 'ngResource', 'ngMaterial'
       var page = page || 0;
       that.currentPage = page;
       
-      Queue.query({page: page}).$promise.then(function(response) {
+      Queue.query({page: page, room:RoomService.selectedRoom}).$promise.then(function(response) {
         that.queue = [];
         that.total = response.total;
         that.numPerPage = response.numPerPage;
