@@ -25,6 +25,7 @@
   "scripts": {
     "test": "grunt test",
     "postinstall": "bower install",
-    "start": "nodemon -L app.js"
+    "start": "node app.js",
+    "debug": "nodemon -L --debug=3001 app.js"
   }
 }
