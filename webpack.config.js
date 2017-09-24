@@ -1,28 +1,74 @@
+var path = require('path')
+var webpack = require('webpack')
+
 module.exports = {
-    entry: './src/app.js',
-    output: {
-      filename: './public/js/bundle.js'
-    },
-    module: {
-        loaders: [
-            {
-                // Ask webpack to check: If this file ends with .js, then apply some transforms
-                test: /\.js$/,
-                // Transform it with babel
-                loader: 'babel',
-                // don't transform node_modules folder (which don't need to be compiled)
-                exclude: /node_modules/
-            },
-            {
-                test: /\.vue$/,
-                loader: 'vue'
-            }
-        ]
-        
-    },
-    vue: {
-        loaders: {
-          js: 'babel'
+  entry: './src/app.js',
+  output: {
+    path: path.resolve(__dirname, './public/dist'),
+    publicPath: '/public/dist',
+    filename: 'build.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+          }
+          // other vue-loader options go here
         }
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]?[hash]'
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      }
+    ]
+  },
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
     }
-  }
+  },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true
+  },
+  performance: {
+    hints: false
+  },
+  devtool: '#eval-source-map'
+}
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map'
+  // http://vue-loader.vuejs.org/en/workflow/production.html
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  ])
+}
