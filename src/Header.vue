@@ -12,13 +12,18 @@
                 </select>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-md-last userinfo">Logged in as Mike</div>
+        <div class="col-sm-6 col-md-4 col-md-last userinfo">Logged in as {{user.display_name}}</div>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'tt-header'
+  name: 'tt-header',
+  computed: {
+      user () {
+          return this.$store.state.user
+      }
+  }
 }
 </script>
 

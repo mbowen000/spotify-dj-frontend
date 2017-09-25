@@ -7,27 +7,28 @@
         </div>
         <div class="row tracks">
             <ul>
-                <li v-for="track in tracks" class="row">
-                    <div class="col-sm-2 media-photo">
-                        <img src="http://placehold.it/50x50"/>
-                    </div>
-                    <div class="col-sm-10 media-info">
-                        <h5>Yeasayer - Odd Blood</h5>
-                        <small>Added by Mike</small>
-                    </div>
-                </li>
+                <tt-track v-for="track in tracks" class="row" :key='track.id' :track="track"/>
             </ul>
         </div>  
     </div>
 </template>
 
 <script>
+import Track from './Track.vue';
+
 export default {
   name: 'tt-tracklist',
-  data () {
-    return {
-        tracks: [{},{},{},{},{},{},{},{},{},{},{},{}]
-    }
+  computed: {
+      tracks() {
+          return this.$store.state.tracks;
+      }
+  },
+  created () {
+      this.$store.dispatch('getCurrentUser');
+      this.$store.dispatch('fetchTracks');
+  },
+  components: {
+      'tt-track': Track
   }
 }
 </script>
