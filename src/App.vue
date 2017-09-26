@@ -37,4 +37,9 @@ export default {
   div.now-playing, div.track-list {
     padding:0;
   }
+  .spinner-container {
+    position: absolute;
+    top:50%;
+    left:50%;
+  }
 </style>

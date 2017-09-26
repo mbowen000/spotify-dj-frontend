@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="track-list">
+        <spinner :show="showSpinner"/>
         <div class="row searchbar">
             <div class="col-sm-12 search-box">
                 <input type="text" placeholder="Search..."/>
@@ -15,6 +16,7 @@
 
 <script>
 import Track from './Track.vue';
+import Spinner from './Spinner.vue';
 
 export default {
   name: 'tt-tracklist',
@@ -24,16 +26,31 @@ export default {
       }
   },
   created () {
-      this.$store.dispatch('getCurrentUser');
-      this.$store.dispatch('fetchTracks');
+      var self = this;
+      this.showSpinner = true;
+      Promise.all([
+        this.$store.dispatch('getCurrentUser'),
+        this.$store.dispatch('fetchTracks')
+      ]).then(function() {
+          self.showSpinner = false;
+      });
+  },
+  data() {
+      return {
+        showSpinner: false
+      }
   },
   components: {
-      'tt-track': Track
+      'tt-track': Track,
+      'spinner': Spinner
   }
 }
 </script>
 
 <style>
+    div.track-list {
+        position:relative;
+    }
     input {
         width:98%;
     }
