@@ -11,6 +11,9 @@ const store = new Vuex.Store({
     tracks:[
       {},{},{},{}
     ],
+    searchResults: [
+
+    ],
     user: {},
     sonos: {
       availableRooms: []
@@ -23,12 +26,15 @@ const store = new Vuex.Store({
     },
     fetchTracks (state, tracks) {
       Vue.set(state, 'tracks', tracks);
+    },
+    setSearchResults (state, results) {
+      Vue.set(state, 'searchResults', results);
     }
   },
   actions: {
     getCurrentUser (context) {
       return Vue.http.get('/me')
-      .then((response) => store.commit('getCurrentUser', response.body))
+      .then((response) => context.commit('getCurrentUser', response.body))
       .catch(function(error) {
         console.error(error);
         window.location = '/login';
@@ -36,8 +42,13 @@ const store = new Vuex.Store({
     },
     fetchTracks (context) {
       return Vue.http.get('/queue')
-      .then((response) => store.commit('fetchTracks', response.body.records))
+      .then((response) => context.commit('fetchTracks', response.body.records))
       .catch((error) => console.error('Could not fetch tracks', error));
+    },
+    search (context, options) {
+      return Vue.http.get('/track/' + options.query)
+      .then((response) => context.commit('setSearchResults', response.body.records))
+      .catch((error) => console.error('Could not query', error));
     }
   }
 });

@@ -2,9 +2,7 @@
     <div class="track-list">
         <spinner :show="showSpinner"/>
         <div class="row searchbar">
-            <div class="col-sm-12 search-box">
-                <input type="text" placeholder="Search..."/>
-            </div>
+            <tt-searchbox/>
         </div>
         <div class="row tracks">
             <ul>
@@ -17,6 +15,7 @@
 <script>
 import Track from './Track.vue';
 import Spinner from './Spinner.vue';
+import Searchbox from './Searchbox.vue';
 
 export default {
   name: 'tt-tracklist',
@@ -42,7 +41,8 @@ export default {
   },
   components: {
       'tt-track': Track,
-      'spinner': Spinner
+      'spinner': Spinner,
+      'tt-searchbox': Searchbox
   }
 }
 </script>
