@@ -4,9 +4,14 @@
         <div class="row searchbar">
             <tt-searchbox/>
         </div>
-        <div class="row tracks">
+        <div class="row tracks" v-if="mode === 'playlist'">
             <ul>
                 <tt-track v-for="track in tracks" class="row" :key='track.id' :track="track"/>
+            </ul>
+        </div>
+        <div class="row tracks" v-if="mode === 'search'">
+            <ul>
+                <tt-track v-for="track in searchResults" class="row" :key='track.id' :track="track"/>
             </ul>
         </div>  
     </div>
@@ -22,6 +27,12 @@ export default {
   computed: {
       tracks() {
           return this.$store.state.tracks;
+      },
+      mode() {
+          return this.$store.state.mode;
+      },
+      searchResults() {
+          return this.$store.state.searchResults;
       }
   },
   created () {

@@ -18,7 +18,8 @@ const store = new Vuex.Store({
     sonos: {
       availableRooms: []
     },
-    currentTrack: {}
+    currentTrack: {},
+    mode: 'search'
   },
   mutations: {
     getCurrentUser (state, user) {
@@ -47,7 +48,7 @@ const store = new Vuex.Store({
     },
     search (context, options) {
       return Vue.http.get('/track/' + options.query)
-      .then((response) => context.commit('setSearchResults', response.body.records))
+      .then((response) => context.commit('setSearchResults', response.body))
       .catch((error) => console.error('Could not query', error));
     }
   }

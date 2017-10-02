@@ -17,7 +17,7 @@ export default {
   computed: {
       albumArtUrl() {
           if(this.track && this.track.album) {
-              return this.track.album.images[1].url;
+              return this.track.album.images[0].url;
           }
       },
       artistName() {
