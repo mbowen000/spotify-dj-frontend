@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import Vuex from 'vuex';
 import VueResource from 'vue-resource';
+import * as types from './store/action-types.js';
 
 Vue.use(Vuex);
 Vue.use(VueResource);
@@ -19,7 +20,7 @@ const store = new Vuex.Store({
       availableRooms: []
     },
     currentTrack: {},
-    mode: 'search'
+    mode: 'playlist'
   },
   mutations: {
     getCurrentUser (state, user) {
@@ -31,7 +32,7 @@ const store = new Vuex.Store({
     setSearchResults (state, results) {
       Vue.set(state, 'searchResults', results);
     },
-    changeSearchMode (state, mode) {
+    [types.CHANGE_SEARCH_MODE] (state, mode) {
       Vue.set(state, 'mode', mode);
     }
   },
@@ -51,16 +52,19 @@ const store = new Vuex.Store({
     },
     search (context, options) {
       return Vue.http.get('/track/' + options.query)
-      .then((response) => context.commit('setSearchResults', response.body))
+      .then((response) => 
+        context.commit('setSearchResults', response.body),
+        context.commit(types.CHANGE_SEARCH_MODE, 'search')
+      )
       .catch((error) => console.error('Could not query', error));
     },
-    changeSearchMode (context, options) {
-      context.commit('changeSearchMode', options.mode);
+    [types.CHANGE_SEARCH_MODE] (context, options) {
+      context.commit(types.CHANGE_SEARCH_MODE, options.mode);
     },
     addTrackToQueue (context, track) {
       return Vue.http.post('/queue', track).then(function(resp) {
         context.commit('fetchTracks', resp.body.records);
-        context.commit('changeSearchMode', 'playlist');
+        context.commit(types.CHANGE_SEARCH_MODE, 'playlist');
       });
     }
   }
