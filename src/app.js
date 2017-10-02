@@ -30,6 +30,9 @@ const store = new Vuex.Store({
     },
     setSearchResults (state, results) {
       Vue.set(state, 'searchResults', results);
+    },
+    changeSearchMode (state, mode) {
+      Vue.set(state, 'mode', mode);
     }
   },
   actions: {
@@ -50,6 +53,15 @@ const store = new Vuex.Store({
       return Vue.http.get('/track/' + options.query)
       .then((response) => context.commit('setSearchResults', response.body))
       .catch((error) => console.error('Could not query', error));
+    },
+    changeSearchMode (context, options) {
+      context.commit('changeSearchMode', options.mode);
+    },
+    addTrackToQueue (context, track) {
+      return Vue.http.post('/queue', track).then(function(resp) {
+        context.commit('fetchTracks', resp.body.records);
+        context.commit('changeSearchMode', 'playlist');
+      });
     }
   }
 });

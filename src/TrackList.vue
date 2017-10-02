@@ -6,12 +6,12 @@
         </div>
         <div class="row tracks" v-if="mode === 'playlist'">
             <ul>
-                <tt-track v-for="track in tracks" class="row" :key='track.id' :track="track"/>
+                <tt-track v-for="track in tracks" class="row" :key='track.id' :track="track" type="playlist-track"/>
             </ul>
         </div>
         <div class="row tracks" v-if="mode === 'search'">
             <ul>
-                <tt-track v-for="track in searchResults" class="row" :key='track.id' :track="track"/>
+                <tt-track v-for="track in searchResults" class="row" :key='track.id' :track="track" type="search-result"/>
             </ul>
         </div>  
     </div>
