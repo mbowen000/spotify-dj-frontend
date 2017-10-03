@@ -1,21 +1,30 @@
 <template>
     <div>
-      <div class="row">
+      <div class="row" v-if="track">
         <div class="col-sm-6 col-md-12 media-art">
           <img src="http://www.placehold.it/300x300"/>
         </div>
         <div class="col-sm-6 col-md-12 media-info">
-          <h1>Bad Blood</h1>
-          <h3>Taylor Swift</h3>
-          <p>Added By Max - 3 Votes</p>
+          <h1>{{track.name}}</h1>
+          <!-- <h3>{{track.artists[0].name}}</h3>
+          <p>Added By {{track.user.name}} - 3 Votes</p> -->
         </div>
       </div>
     </div>
 </template>
 
 <script>
+import * as types from './store/action-types';
 export default {
-  name: 'tt-nowplaying'
+  name: 'tt-nowplaying',
+  computed: {
+    track() {
+      return this.$store.state.currentTrack;
+    }
+  },
+  created() {
+    this.$store.dispatch(types.GET_CURRENT_TRACK);
+  }
 }
 </script>
 

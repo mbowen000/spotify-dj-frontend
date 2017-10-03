@@ -2,13 +2,16 @@
     <div class="track-list">
         <spinner :show="showSpinner"/>
         <div class="row searchbar">
-            <div class="col-sm-12 search-box">
-                <input type="text" placeholder="Search..."/>
-            </div>
+            <tt-searchbox/>
         </div>
-        <div class="row tracks">
+        <div class="row tracks" v-if="mode === 'playlist'">
             <ul>
-                <tt-track v-for="track in tracks" class="row" :key='track.id' :track="track"/>
+                <tt-track v-for="track in tracks" class="row" :key='track.id' :track="track" type="playlist-track"/>
+            </ul>
+        </div>
+        <div class="row tracks" v-if="mode === 'search'">
+            <ul>
+                <tt-track v-for="track in searchResults" class="row" :key='track.id' :track="track" type="search-result"/>
             </ul>
         </div>  
     </div>
@@ -17,12 +20,19 @@
 <script>
 import Track from './Track.vue';
 import Spinner from './Spinner.vue';
+import Searchbox from './Searchbox.vue';
 
 export default {
   name: 'tt-tracklist',
   computed: {
       tracks() {
           return this.$store.state.tracks;
+      },
+      mode() {
+          return this.$store.state.mode;
+      },
+      searchResults() {
+          return this.$store.state.searchResults;
       }
   },
   created () {
@@ -42,7 +52,8 @@ export default {
   },
   components: {
       'tt-track': Track,
-      'spinner': Spinner
+      'spinner': Spinner,
+      'tt-searchbox': Searchbox
   }
 }
 </script>
