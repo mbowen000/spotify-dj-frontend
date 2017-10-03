@@ -4,7 +4,9 @@
             <h2>Teamtunes</h2>
         </div>
         <div class="col-sm-12 col-md-4 col-sm-last row controls">
-            <div class="col-sm-6">System Status: Stopped</div>
+            <div class="col-sm-6">System Status: Stopped
+                <a href="/connect/pause">PAUSE</a>
+            </div>
             <div class="col-sm-6 system">
                 <select name="system-select">
                     <option>System 1</option>

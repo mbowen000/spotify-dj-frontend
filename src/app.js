@@ -79,6 +79,11 @@ const store = new Vuex.Store({
       return Vue.http.get('/nowplaying').then(function(resp) {
         return context.commit(types.GET_CURRENT_TRACK, resp.body);
       });
+    },
+    [types.DELETE_TRACK] (context, track) {
+      return Vue.http.post('/queue/delete', track).then(function(resp) {
+        return context.dispatch('fetchTracks');
+      });
     }
   }
 });

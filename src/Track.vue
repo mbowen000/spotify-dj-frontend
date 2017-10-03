@@ -13,6 +13,7 @@
         </div>
         <div class="col-sm-2 media-controls" v-if="type !== 'search-result'">
             <button v-if="!addedByMe" v-on:click="upvote">Upvote</button> 
+            <button v-if="addedByMe" v-on:click="remove">X</button>
         </div>
     </li>
 </template>
@@ -57,6 +58,13 @@ export default {
               // todo: add success message
           }).catch(function(err) {
               console.error('Error upvoting track...', err);
+          });
+      },
+      remove(event) {
+          this.$store.dispatch(types.DELETE_TRACK, this.track).then(function(response) {
+              console.info('track deleted');
+          }).catch(function(err) {
+              console.error('could not delete', err);
           });
       }
   }
