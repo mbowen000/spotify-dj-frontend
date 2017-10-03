@@ -45,7 +45,7 @@ const store = new Vuex.Store({
       .then((response) => context.commit('getCurrentUser', response.body))
       .catch(function(error) {
         console.error(error);
-        window.location = '/login';
+        window.location = '/login'; 
       });
     },
     fetchTracks (context) {
