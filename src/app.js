@@ -34,6 +34,9 @@ const store = new Vuex.Store({
     },
     [types.CHANGE_SEARCH_MODE] (state, mode) {
       Vue.set(state, 'mode', mode);
+    },
+    [types.GET_CURRENT_TRACK] (state, current) {
+      Vue.set(state, 'currentTrack', current);
     }
   },
   actions: {
@@ -65,6 +68,16 @@ const store = new Vuex.Store({
       return Vue.http.post('/queue', track).then(function(resp) {
         context.commit('fetchTracks', resp.body.records);
         context.commit(types.CHANGE_SEARCH_MODE, 'playlist');
+      });
+    },
+    [types.UPVOTE_TRACK] (context, track) {
+      return Vue.http.post('/track/upvote', track).then(function(resp) {
+        return context.dispatch('fetchTracks');
+      });
+    },
+    [types.GET_CURRENT_TRACK] (context) {
+      return Vue.http.get('/nowplaying').then(function(resp) {
+        return context.commit(types.GET_CURRENT_TRACK, resp.body);
       });
     }
   }

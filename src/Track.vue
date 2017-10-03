@@ -8,12 +8,18 @@
             <small>Added by Mike</small>
         </div>
         <div class="col-sm-2 media-controls" v-if="type === 'search-result'">
-            <button v-on:click="addTrack">+</button>
+            <button v-if="!track.alreadyAdded" v-on:click="addTrack">+</button>
+            <button v-if="track.alreadyAdded">Upvote</button> 
+        </div>
+        <div class="col-sm-2 media-controls" v-if="type !== 'search-result'">
+            <button v-if="!addedByMe" v-on:click="upvote">Upvote</button> 
         </div>
     </li>
 </template>
 
 <script>
+import * as types from './store/action-types.js';
+
 export default {
   name: 'tt-track',
   props: ['track', 'type'],
@@ -27,6 +33,12 @@ export default {
           if(this.track && this.track.artists) {
               return this.track.artists[0].name;
           }
+      },
+      addedByMe() {
+          if(!this.track.user) {
+              return true;
+          }
+          return this.track.user.id === this.$store.state.user.id;
       }
   },
   methods: {
@@ -36,6 +48,15 @@ export default {
                 console.info('Track added', resp);
           }).catch(function(err) {
               console.error('Could not add track...', err);
+          });
+      },
+      upvote(event) {
+          var self = this;
+          this.$store.dispatch(types.UPVOTE_TRACK, this.track).then(function(response) {
+              console.info('track upvoted');
+              // todo: add success message
+          }).catch(function(err) {
+              console.error('Error upvoting track...', err);
           });
       }
   }

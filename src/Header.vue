@@ -12,7 +12,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-md-last userinfo">Logged in as {{user.display_name}}</div>
+        <div class="col-sm-6 col-md-4 col-md-last userinfo">Logged in as {{user.display_name}} - <a href="/logout">Logout</a></div>
     </div>
 </template>
 
