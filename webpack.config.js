@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-console.log(path.join(__dirname, 'config', 'development'));
+console.log(path.join(__dirname, 'src/config', process.env.NODE_ENV));
 
 module.exports = {
   entry: './src/app.js',
