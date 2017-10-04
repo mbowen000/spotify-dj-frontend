@@ -33,7 +33,7 @@
     "test": "grunt test",
     "start": "node app.js",
     "debug": "nodemon -L --debug=3001 app.js",
-    "dev": "webpack --watch"
+    "dev": "webpack --watch | node app.js"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

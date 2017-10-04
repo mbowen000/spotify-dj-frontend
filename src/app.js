@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import VueResource from 'vue-resource';
 import * as types from './store/action-types.js';
 import VueSocketio from 'vue-socket.io';
+import config from 'config';
 
 Vue.use(Vuex);
 Vue.use(VueResource);
@@ -14,7 +15,7 @@ const store = new Vuex.Store({
     tracks:[
       {},{},{},{}
     ],
-    searchResults: [
+    searchResults: [ 
 
     ],
     user: {},
@@ -105,7 +106,7 @@ const store = new Vuex.Store({
   }
 });
 
-Vue.use(VueSocketio, 'http://localhost:3000', store);
+Vue.use(VueSocketio, config.SERVER_URL, store);
 
 const app = new Vue({
   el: '#app',

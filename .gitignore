@@ -8,3 +8,4 @@ spotifydb_original_old
 *.env.sh
 npm-debug.log
 *.sh
+package-lock.json

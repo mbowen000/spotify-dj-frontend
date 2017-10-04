@@ -49,7 +49,11 @@ export default {
 
         // TODO: MOVE THIS TO ACTION IN THE STORE
         console.log(track);
-        this.$http.put('https://api.spotify.com/v1/me/player/play?device_id=' + this.systemid, {
+        var url = 'https://api.spotify.com/v1/me/player/play';
+        if(this.systemid) {
+            url += '?device_id=' + this.systemid;
+        }
+        this.$http.put(url, {
             uris: [track.uri]
         }, {
             headers: {
