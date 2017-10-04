@@ -61,6 +61,10 @@ export default {
 
         this.$store.commit(types.GET_CURRENT_TRACK, track);
         this.$store.dispatch(types.FETCH_TRACKS);
+    },
+    trackUpvoted: function(track) {
+        // when someone upvotes, retreive the latest playlist
+        this.$store.dispatch(types.FETCH_TRACKS);
     }
   }
 }
