@@ -5,7 +5,7 @@
         </div>
         <div class="col-sm-8 media-info">
             <h5>{{artistName}} - {{track.name}}</h5>
-            <small>Added by {{track.user ? track.user.display_name : 'Unknown User'}}</small>
+            <small>Added by {{track.user ? track.user.display_name : track.user.id}}</small>
         </div>
         <div class="col-sm-2 media-controls" v-if="type === 'search-result'">
             <button v-if="!track.alreadyAdded" v-on:click="addTrack">+</button>
