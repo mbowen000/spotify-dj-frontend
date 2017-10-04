@@ -4,9 +4,7 @@
             <h2>Teamtunes</h2>
         </div>
         <div class="col-sm-12 col-md-4 col-sm-last row controls">
-            <div class="col-sm-6">System Status: Stopped
-                <a href="/connect/pause">PAUSE</a>
-            </div>
+            <div class="col-sm-6"></div>
             <div class="col-sm-6 system">
                 <select name="system-select" v-model="systemid">
                     <option v-for="option in systems" v-bind:value="option.id">{{option.name}}</option>
@@ -62,6 +60,7 @@ export default {
         });
 
         this.$store.commit(types.GET_CURRENT_TRACK, track);
+        this.$store.dispatch(types.FETCH_TRACKS);
     }
   }
 }
