@@ -2,7 +2,7 @@
     <div>
       <div class="row" v-if="track">
         <div class="col-sm-6 col-md-12 media-art">
-          <img src="http://www.placehold.it/300x300"/>
+          <img v-bind:src="trackImage" v-if="trackImage"/>
         </div>
         <div class="col-sm-6 col-md-12 media-info">
           <h1>{{track.name}}</h1>
@@ -20,6 +20,12 @@ export default {
   computed: {
     track() {
       return this.$store.state.currentTrack;
+    },
+    trackImage() {
+      if(this.$store.state.currentTrack.album) {
+        return this.$store.state.currentTrack.album.images[0].url;
+      }
+      else {return null;}
     }
   },
   created() {

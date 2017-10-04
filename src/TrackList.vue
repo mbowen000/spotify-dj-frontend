@@ -21,6 +21,7 @@
 import Track from './Track.vue';
 import Spinner from './Spinner.vue';
 import Searchbox from './Searchbox.vue';
+import * as types from './store/action-types';
 
 export default {
   name: 'tt-tracklist',
@@ -40,7 +41,7 @@ export default {
       this.showSpinner = true;
       Promise.all([
         this.$store.dispatch('getCurrentUser'),
-        this.$store.dispatch('fetchTracks')
+        this.$store.dispatch(types.FETCH_TRACKS)
       ]).then(function() {
           self.showSpinner = false;
       });

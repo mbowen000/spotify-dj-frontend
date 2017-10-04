@@ -3,12 +3,14 @@ import App from './App.vue';
 import Vuex from 'vuex';
 import VueResource from 'vue-resource';
 import * as types from './store/action-types.js';
+import VueSocketio from 'vue-socket.io';
 
 Vue.use(Vuex);
 Vue.use(VueResource);
 
 const store = new Vuex.Store({
   state: {
+    systems: [],
     tracks:[
       {},{},{},{}
     ],
@@ -26,7 +28,7 @@ const store = new Vuex.Store({
     getCurrentUser (state, user) {
       Vue.set(state, 'user', user);
     },
-    fetchTracks (state, tracks) {
+    [types.FETCH_TRACKS] (state, tracks) {
       Vue.set(state, 'tracks', tracks);
     },
     setSearchResults (state, results) {
@@ -37,6 +39,9 @@ const store = new Vuex.Store({
     },
     [types.GET_CURRENT_TRACK] (state, current) {
       Vue.set(state, 'currentTrack', current);
+    },
+    [types.GET_USER_SYSTEMS] (state, systems) {
+      Vue.set(state, 'systems', systems);
     }
   },
   actions: {
@@ -48,9 +53,9 @@ const store = new Vuex.Store({
         window.location = '/login'; 
       });
     },
-    fetchTracks (context) {
+    [types.FETCH_TRACKS] (context) {
       return Vue.http.get('/queue')
-      .then((response) => context.commit('fetchTracks', response.body.records))
+      .then((response) => context.commit(types.FETCH_TRACKS, response.body.records))
       .catch((error) => console.error('Could not fetch tracks', error));
     },
     search (context, options) {
@@ -84,9 +89,23 @@ const store = new Vuex.Store({
       return Vue.http.post('/queue/delete', track).then(function(resp) {
         return context.dispatch('fetchTracks');
       });
+    },
+    [types.GET_USER_SYSTEMS] (context, user) {
+      return Vue.http.get('https://api.spotify.com/v1/me/player/devices', {
+        headers: {
+          'Authorization': 'Bearer ' + user.authtoken
+        }
+      }).then(function(resp) {
+        console.log(resp);
+        return context.commit(types.GET_USER_SYSTEMS, resp.body.devices);
+      }).catch(function(err) {
+        console.error(err);
+      })
     }
   }
 });
+
+Vue.use(VueSocketio, 'http://localhost:3000', store);
 
 const app = new Vue({
   el: '#app',
